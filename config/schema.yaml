@@ -1,0 +1,19 @@
+columns:
+- online_order
+- book_table
+- rate
+- votes
+- listed_in(type)
+- cuisines
+- cost
+- listed_in(city)
+
+drop_columns:
+- url
+- address
+- name
+- phone
+- location
+- rest_type
+- dish_liked
+- reviews_list
