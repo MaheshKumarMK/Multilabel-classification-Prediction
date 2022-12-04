@@ -17,3 +17,8 @@ drop_columns:
 - rest_type
 - dish_liked
 - reviews_list
+- menu_item
+
+numerical_cols:
+- votes
+- cost
