@@ -21,4 +21,4 @@ drop_columns:
 
 numerical_cols:
 - votes
-- approx_cost(for two people)
+- cost
