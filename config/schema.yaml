@@ -3,10 +3,12 @@ columns:
 - book_table
 - rate
 - votes
+- dish_liked
 - listed_in(type)
 - cuisines
 - cost
 - listed_in(city)
+- reviews_list
 
 drop_columns:
 - url
@@ -15,8 +17,6 @@ drop_columns:
 - phone
 - location
 - rest_type
-- dish_liked
-- reviews_list
 - menu_item
 
 numerical_cols:
