@@ -47,3 +47,16 @@ DATA_VALIDATION_STD_DEV_REPORT_DIR: str = "std_report"
 
 DATA_VALIDATION_STD_DEV_REPORT_FILE_NAME: str = "std_dev_report.yaml"
 
+
+"""
+Data Transformation ralated constant start with DATA_TRANSFORMATION VAR NAME
+"""
+
+PREPROCSSING_OBJECT_FILE_NAME = "preprocessing.pkl"
+
+DATA_TRANSFORMATION_DIR_NAME: str = "data transformation"
+
+DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR: str = "transformed"
+
+DATA_TRANSFORMATION_TRANSFORMED_OBJECT_DIR:str = "transformed.object"
+

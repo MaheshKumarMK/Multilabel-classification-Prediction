@@ -8,4 +8,5 @@ pyYAML
 evidently==0.1.58.dev0
 dill==0.3.5.1
 imblearn==0.0
+catboost==1.1.1
 -e .

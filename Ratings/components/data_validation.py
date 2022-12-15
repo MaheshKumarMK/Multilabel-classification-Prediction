@@ -96,7 +96,7 @@ class DataValidation:
 
             }})
                 else:
-                    msg += (f"Column {col} has no zero standard deviation    ")
+                    msg += (f"Column {col} has no zero standard deviation")
 
             logging.info(f"zero standard deviation columns: {report}")
 

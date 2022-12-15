@@ -7,7 +7,7 @@ columns:
 - cuisines
 - cost
 - listed_in(city)
-- reviews_list
+
 
 drop_columns:
 - url
@@ -18,6 +18,9 @@ drop_columns:
 - dish_liked
 - rest_type
 - menu_item
+- str_reviews_list
+- mean_reviews_list
+- reviews_list
 
 numerical_cols:
 - votes

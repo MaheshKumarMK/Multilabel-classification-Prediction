@@ -7,14 +7,17 @@ from ratings.logger import logging
 from ratings.entity.config_entity import (
     TrainingPipelineConfig, 
     DataIngestionConfig,
-    DataValidationConfig
+    DataValidationConfig,
+    DataTransformationConfig
 )
 from ratings.entity.artifact_entity import (
     DataIngestionArtifact,
-    DataValidationArtifact
+    DataValidationArtifact,
+    DataTransformationArtifact
 )
 from ratings.components.data_ingestion import DataIngestion
 from ratings.components.data_validation import DataValidation
+from ratings.components.data_transformation import DataTransformation
 
 from ratings.constant.training_pipeline import *
 
@@ -26,6 +29,8 @@ class TrainPipeline:
         self.data_ingestion_config=DataIngestionConfig()
 
         self.data_validation_config= DataValidationConfig()
+
+        self.data_transformation_config = DataTransformationConfig()
 
 
     def start_data_ingestion(self)->DataIngestionArtifact: #this function should return train and test file path as mentioned in artifact
@@ -78,6 +83,25 @@ class TrainPipeline:
         except Exception as e:
             raise RatingsException(e, sys) from e
 
+    
+    def start_data_transformation(
+        self, data_validation_artifact: DataValidationArtifact
+    )-> DataTransformationArtifact:
+
+        try:
+            data_transformation = DataTransformation(
+                data_validation_artifact, self.data_transformation_config
+            )
+
+            data_transformation_artifact = (
+                data_transformation.initiate_data_transformation()
+            )
+
+            return data_transformation_artifact
+
+        except Exception as e:
+            raise RatingsException(e, sys)
+
     def run_pipeline(self):
 
 
@@ -85,6 +109,8 @@ class TrainPipeline:
             data_ingestion_artifact = self.start_data_ingestion()
 
             data_validation_artifact = self.start_data_validation(data_ingestion_artifact)
+
+            data_transformation_artifact = self.start_data_transformation(data_validation_artifact)
 
         except Exception as e:
     
