@@ -21,8 +21,9 @@ from catboost import CatBoostClassifier
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import LabelEncoder
-
+from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.compose import make_column_selector as selector
 
 
 
@@ -48,9 +49,9 @@ class DataTransformation:
     
         except Exception as e:
             raise RatingsException(e, sys)
-
+    
     @classmethod
-    def get_num_data_transformer_object(cls)-> Pipeline:
+    def get_data_transformer_object(cls)-> Pipeline:
         """
         :return: Pipeline object to transform dataset
         """
@@ -63,52 +64,22 @@ class DataTransformation:
 
             robust_scaler = RobustScaler()
 
-            num_iterative_imputer = IterativeImputer(initial_strategy='median')
+            numerical_transformer = Pipeline(
+                steps=[
+                    ('imp_num', IterativeImputer(initial_strategy='median')),
+                    ('RobustScaler', robust_scaler)
+                    ]
+                )
 
+            categorical_transformer = OneHotEncoder(handle_unknown="ignore")
 
-            logging.info("Initialized RobustScaler, IterativeImputer")
+            logging.info("Initialized RobustScaler, Iterative Imputer")
 
-            # num_features = df.select_dtypes(exclude="object").columns
-            # catg_features = df.select_dtypes(include="object").columns
-
-
-            preprocessor_num = Pipeline(
-                steps=[("imputer", num_iterative_imputer), ("RobustScaler", robust_scaler)]
-            )
-
-            logging.info("Created preprocessor object from ColumnTransformer")
-
-            logging.info(
-                "Exited get_data_transformer_object method of DataTransformation class"
-            )
-
-            return preprocessor_num
-
-
-        except Exception as e:
-            raise RatingsException(e, sys)
-
-    @classmethod
-    def get_catg_data_transformer_object(cls)-> Pipeline:
-        """
-        :return: Pipeline object to transform dataset
-        """
-        logging.info(
-             "Entered get_data_transformer_object method of DataTransformation class"
-        )
-
-        try:
-            logging.info("Got numerical cols from schema config")
-
-            robust_scaler = RobustScaler()
-
-            catg_iterative_imputer = IterativeImputer(initial_strategy='most_frequent')
-
-            logging.info("Initialized RobustScaler, IterativeImputer")
-
-            preprocessor_catg = Pipeline(
-                steps=[("imputer", catg_iterative_imputer), ("RobustScaler", robust_scaler)]
-            )
+            preprocessor = ColumnTransformer(
+                transformers=[
+                    ("num", numerical_transformer, selector(dtype_exclude="category")),
+                    ("cat", categorical_transformer, selector(dtype_include="category"))
+                    ])
 
             logging.info("Created preprocessor object from ColumnTransformer")
 
@@ -116,11 +87,83 @@ class DataTransformation:
                 "Exited get_data_transformer_object method of DataTransformation class"
             )
 
-            return preprocessor_catg
-
+            return preprocessor
 
         except Exception as e:
             raise RatingsException(e, sys)
+
+    # @classmethod
+    # def get_num_data_transformer_object(cls)-> Pipeline:
+    #     """
+    #     :return: Pipeline object to transform dataset
+    #     """
+    #     logging.info(
+    #          "Entered get_data_transformer_object method of DataTransformation class"
+    #     )
+
+    #     try:
+    #         logging.info("Got numerical cols from schema config")
+
+    #         robust_scaler = RobustScaler()
+
+    #         num_iterative_imputer = IterativeImputer(initial_strategy='median')
+
+
+    #         logging.info("Initialized RobustScaler, IterativeImputer")
+
+    #         # num_features = df.select_dtypes(exclude="object").columns
+    #         # catg_features = df.select_dtypes(include="object").columns
+
+
+    #         preprocessor_num = Pipeline(
+    #             steps=[("imputer", num_iterative_imputer), ("RobustScaler", robust_scaler)]
+    #         )
+
+    #         logging.info("Created preprocessor object from ColumnTransformer")
+
+    #         logging.info(
+    #             "Exited get_data_transformer_object method of DataTransformation class"
+    #         )
+
+    #         return preprocessor_num
+
+
+    #     except Exception as e:
+    #         raise RatingsException(e, sys)
+
+    # @classmethod
+    # def get_catg_data_transformer_object(cls)-> Pipeline:
+    #     """
+    #     :return: Pipeline object to transform dataset
+    #     """
+    #     logging.info(
+    #          "Entered get_data_transformer_object method of DataTransformation class"
+    #     )
+
+    #     try:
+    #         logging.info("Got numerical cols from schema config")
+
+    #         robust_scaler = RobustScaler()
+
+    #         catg_iterative_imputer = IterativeImputer(initial_strategy='most_frequent')
+
+    #         logging.info("Initialized RobustScaler, IterativeImputer")
+
+    #         preprocessor_catg = Pipeline(
+    #             steps=[("imputer", catg_iterative_imputer), ("RobustScaler", robust_scaler)]
+    #         )
+
+    #         logging.info("Created preprocessor object from ColumnTransformer")
+
+    #         logging.info(
+    #             "Exited get_data_transformer_object method of DataTransformation class"
+    #         )
+
+    #         return preprocessor_catg
+
+
+    #     except Exception as e:
+    #         raise RatingsException(e, sys)
 
     
     def initiate_data_transformation(self)-> DataTransformationArtifact:
@@ -128,9 +171,7 @@ class DataTransformation:
         try:
             logging.info("Starting data transformation")
 
-            preprocessor_num = self.get_num_data_transformer_object()
-
-            preprocessor_catg = self.get_catg_data_transformer_object()
+            preprocessor = self.get_data_transformer_object()
 
             logging.info("Got the preprocessor object")
 
@@ -155,17 +196,11 @@ class DataTransformation:
             logging.info("Got input features and target features of test dataset")
 
 
-            num_features_train = input_feature_train_df.select_dtypes(exclude="object").columns
-
             catg_features_train = input_feature_train_df.select_dtypes(include="object").columns
-
-
-            num_features_test = input_feature_test_df.select_dtypes(exclude="object").columns
 
             catg_features_test = input_feature_test_df.select_dtypes(include="object").columns
 
             logging.info("Got the numerical and categorical columns")
-
 
             le=LabelEncoder()
 
@@ -186,45 +221,39 @@ class DataTransformation:
                 "Applying preprocessing object on training dataframe and testing dataframe"
             )
 
-            input_feature_train_df[num_features_train] = preprocessor_num.fit_transform(input_feature_train_df[num_features_train])
-
-            input_feature_train_df[catg_features_train] = preprocessor_catg.fit_transform(input_feature_train_df[catg_features_train])
-
+            input_feature_train_arr = preprocessor.fit_transform(input_feature_train_df)
 
             logging.info(
                 "Used the preprocessor object to fit transform the train features"
             )
 
-            input_feature_test_df[num_features_test] = preprocessor_num.transform(input_feature_test_df[num_features_test])
-
-            input_feature_test_df[catg_features_test] = preprocessor_catg.transform(input_feature_test_df[catg_features_test])
+            input_feature_test_arr = preprocessor.transform(input_feature_test_df)
 
             logging.info("Used the preprocessor object to transform the test features")
-  
 
+
+            logging.info(
+                "Used the preprocessor object to fit transform the train features"
+            )
+  
             logging.info("Createing train array and test array")
 
             train_arr = np.c_[
-                input_feature_train_df, target_feature_train_df
+                input_feature_train_arr, target_feature_train_df
             ]
 
             test_arr = np.c_[
-                input_feature_test_df, target_feature_test_df
+                input_feature_test_arr, target_feature_test_df
             ]
 
             save_object(
                 self.data_transformation_config.transformed_object_file_path,
-                preprocessor_num,
-            )
-
-            save_object(
-                self.data_transformation_config.transformed_object_file_path,
-                preprocessor_catg,
+                preprocessor
             )
 
             save_numpy_array_data(
                 self.data_transformation_config.transformed_train_file_path,
-                array=train_arr,
+                array=train_arr
             )
 
             save_numpy_array_data(
