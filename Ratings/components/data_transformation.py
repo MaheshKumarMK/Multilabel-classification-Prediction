@@ -71,7 +71,12 @@ class DataTransformation:
                     ]
                 )
 
-            categorical_transformer = OneHotEncoder(handle_unknown="ignore")
+            categorical_transformer = Pipeline(
+                steps=[
+                    ('imp_num', IterativeImputer(initial_strategy='most_frequent')),
+                    ('RobustScaler', robust_scaler)
+                    ]
+                )
 
             logging.info("Initialized RobustScaler, Iterative Imputer")
 
@@ -179,9 +184,17 @@ class DataTransformation:
                 filepath= self.data_validation_artifact.valid_train_file_path
             )
 
+            train_df['cost'].replace(0,np.nan, inplace=True)
+
+            logging.info(f"null value in train_df: {train_df['cost'].isnull().sum()}")
+
             test_df = DataTransformation.read_data(
                 filepath=self.data_validation_artifact.valid_test_file_path
             )
+
+            test_df['cost'].replace(0,np.nan, inplace=True)
+
+            logging.info(f"null value in train_df: {test_df['cost'].isnull().sum()}")
 
             input_feature_train_df = train_df.drop(columns=[TARGET_COLUMN], axis=1)
 
@@ -231,12 +244,8 @@ class DataTransformation:
 
             logging.info("Used the preprocessor object to transform the test features")
 
-
-            logging.info(
-                "Used the preprocessor object to fit transform the train features"
-            )
   
-            logging.info("Createing train array and test array")
+            logging.info("Creating train array and test array")
 
             train_arr = np.c_[
                 input_feature_train_arr, target_feature_train_df
