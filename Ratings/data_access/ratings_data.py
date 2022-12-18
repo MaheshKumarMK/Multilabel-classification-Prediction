@@ -42,17 +42,14 @@ class RatingData:
                     df=df.drop(columns=["_id"], axis=1)
 
                 logging.info("dropped the column _id created by mongoDB database")
-                
-                df.replace({"na":np.nan}, inplace=True)
-
-                logging.info("Replaced all the 'na' recorded by 'nan'")
 
                 df=df.rename(columns={"approx_cost(for two people)":"cost"})
 
-                df["cost"]=df["cost"].replace({np.nan:0})
-                df["cost"]=df["cost"].replace({'':0})
                 df["cost"]=df["cost"].astype(str)
                 df["cost"]=df["cost"].apply(lambda x: x.replace(",","")).astype(float)
+                df["cost"]=df["cost"].replace({np.nan:0})
+                # df["cost"]=df["cost"].replace({'':0})
+                
 
                 logging.info("processed the approx_cost(for two people) column and converted the cost column to float")
 
