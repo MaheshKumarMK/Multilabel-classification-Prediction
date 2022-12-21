@@ -12,3 +12,4 @@ Before we run the project, make sure that you are having MongoDB in your local s
 ```bash
 conda create -n restaurant python=3.8.0 -y
 ```
+Data Validation@2x.png
