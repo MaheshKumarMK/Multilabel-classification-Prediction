@@ -111,3 +111,31 @@ class ModelTrainingConfig:
     #model_config_file_path = MODEL_TRAINER_MODEL_CONFIG_FILE_PATH
 
     overfitting_underfitting_threshold = MODEL_TRAINER_OVER_FIITING_UNDER_FITTING_THRESHOLD
+
+
+@dataclass
+class ModelEvaluationConfig:
+    model_evaluation_dir: str = os.path.join(
+        training_pipeline_config.artifact_dir, MODEL_EVALUATION_DIR_NAME
+    )
+
+    report_file_path = os.path.join(
+        model_evaluation_dir, MODEL_EVALUATION_REPORT_NAME
+    )
+
+    change_threshold_score = MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE
+
+
+@dataclass
+class ModelPusherConfig:
+    model_evaluation_dir: str = os.path.join(
+            training_pipeline_config.artifact_dir,MODEL_PUSHER_DIR_NAME
+    )
+
+    model_file_path = os.path.join(model_evaluation_dir,MODEL_FILE_NAME)
+
+    timestamp = round(datetime.now().timestamp())
+
+    saved_model_path=os.path.join(
+        SAVED_MODEL_DIR,f"{timestamp}",MODEL_FILE_NAME
+    )

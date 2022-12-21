@@ -6,6 +6,7 @@ class DataIngestionArtifact:
 
     test_file_path: str
 
+
 @dataclass
 class DataValidationArtifact:
     validation_status: bool
@@ -48,3 +49,17 @@ class ModelTrainerArtifact:
     train_metric_artifact: ClassificationMetricArtifact
 
     test_metric_artifact: ClassificationMetricArtifact
+
+@dataclass
+class ModelEvaluationArtifact:
+    is_model_accepted: bool
+    improved_accuracy: float
+    best_model_path: str
+    trained_model_path: str
+    train_model_metric_artifact: ClassificationMetricArtifact
+    best_model_metric_artifact: ClassificationMetricArtifact
+
+@dataclass
+class ModelPusherArtifact:
+    saved_model_path:str
+    model_file_path:str

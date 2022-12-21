@@ -3,7 +3,9 @@ from ratings.exception import RatingsException
 from ratings.logger import logging
 import sys
 
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier, AdaBoostClassifier
+from sklearn.tree import DecisionTreeClassifier
+from catboost import CatBoostClassifier
 from sklearn.pipeline import Pipeline
 
 from ratings.entity.config_entity import ModelTrainingConfig
@@ -29,11 +31,11 @@ class ModelTrainer:
 
     def train_model(self, x_train, y_train):
         try:
-            rf_clf = RandomForestClassifier()
+            mod_clf = AdaBoostClassifier()
 
-            rf_clf.fit(x_train, y_train)
+            mod_clf.fit(x_train, y_train)
 
-            return rf_clf
+            return mod_clf
 
         except Exception as e:
             raise RatingsException(e,sys)
@@ -74,6 +76,10 @@ class ModelTrainer:
                 f"difference in score: {diff}"
             )
 
+            logging.info(
+                f"train score:{classification_train_metric.f1_score}"
+            )
+
             if diff>self.model_trainer_config.overfitting_underfitting_threshold:
                 raise Exception("Model is not good try to do more experimentation.")
             
@@ -82,7 +88,7 @@ class ModelTrainer:
             ratings_model = RatingsModel(preprocessing_object = preprocessor_obj, trained_model_object=model)
 
             logging.info(
-                "Created Ratings truck model object with preprocessor and model"
+                "Created Ratings model object with preprocessor and model"
             )
 
             logging.info("Created best model file path.")

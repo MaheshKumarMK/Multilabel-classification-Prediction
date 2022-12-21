@@ -77,3 +77,24 @@ MODEL_TRAINER_EXPECTED_SCORE: float = 0.6
 MODEL_TRAINER_OVER_FIITING_UNDER_FITTING_THRESHOLD: float = 0.05
 
 
+"""
+MODEL Evauation related constant start with MODEL_EVALUATION var name
+"""
+MODEL_EVALUATION_DIR_NAME: str = "model evaluation"
+
+MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE:float = 0.02
+
+MODEL_EVALUATION_REPORT_NAME = "report.yaml"
+
+SAVED_MODEL_DIR =os.path.join("saved_models")
+
+MODEL_FILE_NAME = "model.pkl"
+
+"""
+MODEL Pusher related constant start with MODEL_Pusher var name
+"""
+
+MODEL_PUSHER_DIR_NAME = "model_pusher"
+
+MODEL_PUSHER_SAVED_MODEL_DIR = SAVED_MODEL_DIR
+
