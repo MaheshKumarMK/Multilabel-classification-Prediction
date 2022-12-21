@@ -61,7 +61,6 @@ async def train_route():
 #         df['predicted_column'] = y_pred
 #         df['predicted_column'].replace(TargetValueMapping().reverse_mapping(),inplace=True)
         
-        
 #     except Exception as e:
 #         raise Response(f"Error Occured! {e}")
 
