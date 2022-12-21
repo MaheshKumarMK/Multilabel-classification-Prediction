@@ -1,9 +1,11 @@
 
 import sys, os
+import pandas as pd
 
 from pandas import DataFrame
 from sklearn.pipeline import Pipeline
 from sklearn import model_selection
+from sklearn.preprocessing import LabelEncoder
 
 from ratings.exception import RatingsException
 from ratings.logger import logging
@@ -17,11 +19,19 @@ class RatingsModel:
 
         self.trained_model_object = trained_model_object
 
-    def predict(self, dataframe: DataFrame) -> DataFrame:
-        logging.info("Entered predict method of RatingsTruckModel class")
+    def model_predict(self, dataframe: DataFrame) -> DataFrame:
+        logging.info("Entered predict method of RatingsModel class")
 
         try:
             logging.info("Using the trained model to get predictions")
+
+            catg_features = dataframe.select_dtypes(include="object").columns
+
+            le=LabelEncoder()
+
+            dataframe[catg_features] = dataframe[catg_features].apply(lambda series: pd.Series(
+            le.fit_transform(series[series.notnull()]),
+            index=series[series.notnull()].index))
 
             transformed_feature = self.preprocessing_object.transform(dataframe)
 

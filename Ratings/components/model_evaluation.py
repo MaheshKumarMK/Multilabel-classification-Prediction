@@ -10,7 +10,7 @@ from ratings.entity.artifact_entity import (
     DataValidationArtifact, ModelTrainerArtifact,ModelEvaluationArtifact
     )
 from ratings.constant.training_pipeline import *
-from ratings.ml.model.estimator import ModelResolver
+from ratings.ml.model.estimator import *
 from ratings.utils.main_utils import load_object, write_yaml_file
 from ratings.ml.metric.classification_metric import get_classification_score
 
@@ -46,7 +46,7 @@ class ModelEvaluation:
 
             logging.info("Got the train df and test df")
 
-            df = pd.concat([train_df, test_df])
+            df = pd.concat([train_df, test_df]).reset_index()
 
             logging.info("Combined train df and test df")
 
@@ -92,9 +92,9 @@ class ModelEvaluation:
             train_model = load_object(file_path=train_model_file_path)
 
 
-            y_trained_pred = train_model.predict(df)
+            y_trained_pred = train_model.model_predict(df)
 
-            y_latest_pred = latest_model.predict(df)
+            y_latest_pred = latest_model.model_predict(df)
 
 
             trained_metric = get_classification_score(y_true, y_trained_pred)

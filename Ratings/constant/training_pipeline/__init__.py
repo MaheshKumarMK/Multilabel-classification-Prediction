@@ -90,4 +90,11 @@ SAVED_MODEL_DIR =os.path.join("saved_models")
 
 MODEL_FILE_NAME = "model.pkl"
 
+"""
+MODEL Pusher related constant start with MODEL_Pusher var name
+"""
+
+MODEL_PUSHER_DIR_NAME = "model_pusher"
+
+MODEL_PUSHER_SAVED_MODEL_DIR = SAVED_MODEL_DIR
 
