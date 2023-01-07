@@ -32,7 +32,7 @@ Before we run the project, make sure that you are having MongoDB in your local s
 
 ## Project Pipeline
 <p align="center">
-  <img src="images\Ratings_training_pipline.png" width="350" title="hover text">
+  <img src="images\Ratings_training_pipline.png" width="500" title="hover text">
 </p>
 
 ## Project Archietecture
