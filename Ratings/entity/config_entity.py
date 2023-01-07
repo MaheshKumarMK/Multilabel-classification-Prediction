@@ -139,3 +139,4 @@ class ModelPusherConfig:
     saved_model_path=os.path.join(
         SAVED_MODEL_DIR,f"{timestamp}",MODEL_FILE_NAME
     )
+
