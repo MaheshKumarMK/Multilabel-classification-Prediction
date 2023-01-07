@@ -31,7 +31,7 @@ The training set contains 57000 examples in total number of Attributes is 13.
 Before we run the project, make sure that you are having MongoDB in your local system, with Compass since we are using MongoDB for data storage. You also need AWS account to access the service like S3, ECR and EC2 instances.
 
 ## Project Pipeline
-![image](Ratings_training_pipline.png)
+![image](images\Ratings_training_pipline.png)
 
 ## Project Archietecture
 
