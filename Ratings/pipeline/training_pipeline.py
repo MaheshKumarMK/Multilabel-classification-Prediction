@@ -30,6 +30,10 @@ from ratings.components.model_pusher import ModelPusher
 
 from ratings.constant.training_pipeline import *
 
+from ratings.cloud_storage.s3_syncher import *
+
+from ratings.constant.s3_bucket import *
+
 class TrainPipeline:
 
     is_pipeline_running=False
@@ -169,6 +173,29 @@ class TrainPipeline:
 
         except  Exception as e:
             raise  RatingsException(e,sys)
+
+    def sync_artifact_dir_to_s3(self):
+        try:
+            aws_buket_url = f"s3://{TRAINING_BUCKET_NAME}/artifact/{self.training_pipeline_config.timestamp}"
+
+            self.s3_sync.sync_folder_to_s3(
+                folder = self.training_pipeline_config.artifact_dir,
+                aws_bucket_url=aws_buket_url
+                )
+        except Exception as e:
+            raise RatingsException(e,sys)
+
+    def sync_saved_model_dir_to_s3(self):
+        try:
+            aws_buket_url = f"s3://{TRAINING_BUCKET_NAME}/{SAVED_MODEL_DIR}"
+
+            self.s3_sync.sync_folder_to_s3(
+                folder = SAVED_MODEL_DIR,
+                aws_bucket_url=aws_buket_url
+                )
+
+        except Exception as e:
+            raise RatingsException(e,sys)
 
     def run_pipeline(self):
 
