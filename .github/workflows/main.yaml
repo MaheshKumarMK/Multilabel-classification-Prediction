@@ -82,12 +82,12 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
       
       
-      - name: Pull latest images
-        run: |
-         docker pull ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
-      - name: Stop and remove ratings container if running
-        run: |
-         docker ps -q --filter "name=ratings" | grep -q . && docker stop ratings && docker rm -fv ratings
+      # - name: Pull latest images
+      #   run: |
+      #    docker pull ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+      # - name: Stop and remove ratings container if running
+      #   run: |
+      #    docker ps -q --filter "name=ratings" | grep -q . && docker stop ratings && docker rm -fv ratings
        
       - name: Run Docker Image to serve users
         run: |
