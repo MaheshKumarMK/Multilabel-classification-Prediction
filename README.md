@@ -93,11 +93,6 @@ http://localhost:8080/train
 
 ```
 
-### Step 7. Prediction application
-
-```bash
-http://localhost:8080/predict
-
 ```
 
 ## Run locally
